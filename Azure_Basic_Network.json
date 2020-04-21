@@ -20,7 +20,7 @@
         "type": "string",
         "defaultValue": "GatewaySubnet",
         "metadata": {
-          "description": "Subnet 1 Name, this subnet will not be assigned an NSG." 
+          "description": "Subnet 1 Name" 
         }
     },
     "subnet1Prefix": {
@@ -177,6 +177,18 @@
         }
       },
       "resources": [
+        {
+          "apiVersion": "2018-10-01",
+          "type": "subnets",
+          "location": "[parameters('location')]",
+          "name": "[parameters('subnet1Name')]",
+          "dependsOn": [
+            "[parameters('VnetName')]"
+          ],
+          "properties": {
+            "addressPrefix": "[parameters('subnet1Prefix')]"
+          }
+        },
         {
           "apiVersion": "2018-10-01",
           "type": "subnets",
