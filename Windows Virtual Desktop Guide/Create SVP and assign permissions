@@ -36,7 +36,7 @@ $SVP = New-AzAdServicePrincipal -DisplayName $SVP_Displayname -PasswordCredentia
 
 Start-Sleep 10
 
-#WVD cmd to assign permissions to svp
+#WVD CMDlet to assign permissions to svp
 New-RdsRoleAssignment -RoleDefinitionName "RDS Contributor" -ApplicationId $SVP.ApplicationId -TenantGroupName "Default Tenant Group" -TenantName $WVD_Workspace_Name
 
 #Assign azure sub contributor permissions
