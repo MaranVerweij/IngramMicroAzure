@@ -5,7 +5,9 @@
 #Run as Administrator
 #Fill in the variables below
 
-$UserName = "name@tenant.onmicrosoft.com" #Azure account name in UPN format
+#$UserName requires the account that was previously used to create the WVD tenant/workspace,
+#if this account uses MFA 2 authentication screens will popup when executing the script.
+$UserName = "name@tenant.onmicrosoft.com" #Azure account name in UPN format, 
 $Password = "password" #Password for Azure account
 $Azure_sub = "" #Azure subscription ID
 
@@ -18,22 +20,28 @@ $Execution_Policy = Get-ExecutionPolicy #Get current Execution policy
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force 
 
 if (!(Get-InstalledModule Microsoft.RDInfra.RDPowerShell -ErrorAction silentlycontinue)) {
-    Install-Module -Name Microsoft.RDInfra.RDPowerShell -Confirm:$False -Force
+    Install-Module -Name Microsoft.RDInfra.RDPowerShell -Confirm:$False -Force -AllowClobber
     }
 Import-Module -Name Microsoft.RDInfra.RDPowerShell
 
 if (!(Get-InstalledModule Az -ErrorAction silentlycontinue)) {
-    Install-Module -Name Az -Confirm:$False -Force
+    Install-Module -Name Az -Confirm:$False -Force -AllowClobber
     }
-Import-Module -Name Az
 
 Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force #Restore initial Execution policy
 
 [System.Security.SecureString]$SecPwd = ConvertTo-SecureString -String $Password -AsPlainText -Force #Create creds from previous input
 $Credentials = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $UserName, $SecPwd
 
+Try {
 Add-RdsAccount -DeploymentUrl https://rdbroker.wvd.microsoft.com -Credential $Credentials #Authenticate to WVD management site
 Connect-AzAccount -Credential $Credentials -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module)
+}
+
+Catch {
+Add-RdsAccount -DeploymentUrl https://rdbroker.wvd.microsoft.com #Authenticate to WVD management site
+Connect-AzAccount -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module)
+} 
 
 $credentials = New-Object Microsoft.Azure.Commands.ActiveDirectory.PSADPasswordCredential -Property @{ StartDate=Get-Date; EndDate=Get-Date -Year 3000; Password=$SVP_Password}
 $SVP = New-AzAdServicePrincipal -DisplayName $SVP_Displayname -PasswordCredential $credentials
