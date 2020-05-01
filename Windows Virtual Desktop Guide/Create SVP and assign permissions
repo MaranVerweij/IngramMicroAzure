@@ -20,7 +20,7 @@ $Execution_Policy = Get-ExecutionPolicy #Get current Execution policy
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force 
 
 if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Confirm:$False -Force
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Confirm:$False -Force
     }
 
 if (!(Get-InstalledModule Microsoft.RDInfra.RDPowerShell -ErrorAction silentlycontinue)) {
