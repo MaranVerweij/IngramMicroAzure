@@ -18,7 +18,10 @@ $WVD_Workspace_Name = "name" #WVD Workspace/Tenant name, as created previously
 #No more manual input required as of this line
 $Execution_Policy = Get-ExecutionPolicy #Get current Execution policy
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force 
-Install-PackageProvider -Name NuGet -Confirm:$False -Force
+
+if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Confirm:$False -Force
+    }
 
 if (!(Get-InstalledModule Microsoft.RDInfra.RDPowerShell -ErrorAction silentlycontinue)) {
     Install-Module -Name Microsoft.RDInfra.RDPowerShell -Confirm:$False -Force -AllowClobber
