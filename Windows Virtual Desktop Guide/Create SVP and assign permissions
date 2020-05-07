@@ -9,8 +9,8 @@ $UserName = "user@clientname.onmicrosoft.com" #Azure account name in UPN format
 $Password = "" #Password for Azure account
 $Azure_sub = "cdd8abba-01ca-4be9-8984-1583c8104418" #Azure subscription ID
 
-$SVP_Displayname = "SVP_WVD_1mad1"
-$SVP_Password = "Guwu6141!!@dsf@!a" #Max 1024 characters
+$SVP_Displayname = "SVP_WVD_1" #Display name for the service principal
+$SVP_Password = "Guwu6141!!@dsf@!a" #Max 850 characters
 
 #No more manual input required as of this line, the script can be run now.
 $Execution_Policy = Get-ExecutionPolicy #Get current Execution policy
