@@ -5,17 +5,14 @@
 #Run as Administrator
 #Fill in the variables below
 
-#$UserName requires the account that was previously used to create the WVD tenant/workspace,
-#if this account uses MFA 2 authentication screens will popup when executing the script.
-$UserName = "name@tenant.onmicrosoft.com" #Azure account name in UPN format, 
-$Password = "password" #Password for Azure account
-$Azure_sub = "" #Azure subscription ID
+$UserName = "maran@theateamnl.onmicrosoft.com" #Azure account name in UPN format
+$Password = "Guwu6141!!@@!a!" #Password for Azure account
+$Azure_sub = "cdd8abba-01ca-4be9-8984-1583c8104418" #Azure subscription ID
 
-$SVP_Displayname = "SVP_WVD_1" #Display name for the Service principal
-$SVP_Password = "password" #Maximum length is approx. 850 characters (varies slightly based on string complexity), utilizing the maximum amount is highly recommended for security purposes
-$WVD_Workspace_Name = "name" #WVD Workspace/Tenant name, as created previously
+$SVP_Displayname = "SVP_WVD_1mad1"
+$SVP_Password = "Guwu6141!!@dsf@!a" #Max 1024 characters
 
-#No more manual input required as of this line
+#No more manual input required as of this line, the script can be run now.
 $Execution_Policy = Get-ExecutionPolicy #Get current Execution policy
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force 
 
@@ -23,14 +20,10 @@ if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Confirm:$False -Force
     }
 
-if (!(Get-InstalledModule Microsoft.RDInfra.RDPowerShell -ErrorAction silentlycontinue)) {
-    Install-Module -Name Microsoft.RDInfra.RDPowerShell -Confirm:$False -Force -AllowClobber
-    }
-Import-Module -Name Microsoft.RDInfra.RDPowerShell
-
 if (!(Get-InstalledModule Az -ErrorAction silentlycontinue)) {
-    Install-Module -Name Az -Confirm:$False -Force -AllowClobber
+    Install-Module -Name Az -Confirm:$False -Force
     }
+Import-Module -Name Az
 
 Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force #Restore initial Execution policy
 
@@ -38,12 +31,10 @@ Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force
 $Credentials = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $UserName, $SecPwd
 
 Try {
-Add-RdsAccount -DeploymentUrl https://rdbroker.wvd.microsoft.com -Credential $Credentials #Authenticate to WVD management site
 Connect-AzAccount -Credential $Credentials -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module)
 }
 
 Catch {
-Add-RdsAccount -DeploymentUrl https://rdbroker.wvd.microsoft.com #Authenticate to WVD management site
 Connect-AzAccount -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module)
 } 
 
@@ -51,9 +42,6 @@ $credentials = New-Object Microsoft.Azure.Commands.ActiveDirectory.PSADPasswordC
 $SVP = New-AzAdServicePrincipal -DisplayName $SVP_Displayname -PasswordCredential $credentials
 
 Start-Sleep 10
-
-#WVD CMDlet to assign permissions to svp
-New-RdsRoleAssignment -RoleDefinitionName "RDS Contributor" -ApplicationId $SVP.ApplicationId -TenantGroupName "Default Tenant Group" -TenantName $WVD_Workspace_Name
 
 #Assign azure sub contributor permissions
 New-AzRoleAssignment -RoleDefinitionName "Contributor" -ApplicationId $SVP.ApplicationId
