@@ -6,7 +6,7 @@
 #Fill in the variables below
 
 $UserName = "user@clientname.onmicrosoft.com" #Azure account name in UPN format
-$Password = "" #Password for Azure account
+$Password = "Guwu6141!!@dsf@!a" #Password for Azure account
 $Azure_sub = "cdd8abba-01ca-4be9-8984-1583c8104418" #Azure subscription ID
 
 $SVP_Displayname = "SVP_WVD_1" #Display name for the service principal
