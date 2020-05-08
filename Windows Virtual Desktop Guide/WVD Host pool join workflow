@@ -5,9 +5,9 @@
 #Run as Administrator
 #Fill in the variables below
 
-$SVP_App_ID = "1bc19cbb-456e-4adf-853d-ba865c736c7c" #Provide the previously created service principal Application ID   
-$SVP_Password = "#7DJgf2nHPewbNvA2fUURcsaWNfgqy9dPgtZYAK9bHUqdaBEWaPTpbWux3ThCfRJAdyCcqdtQ9AcnT4zjMnXnc6K37Gds2nuyRux56svxLS4USeErGjSsRQBAmgVymNK2gx3EZqTPYHmmK6VH3uwadCGrENjMaeyaLW8FUP4ZXZfFxgCfbxr3kfTsBsvsGdPPTTmPCbZugZsNcGwugKQ9VS4D6YjJcRzMEZ2Z4fJtsz47Bf6fC6UxRbxPYRU86GCyN92LN5wdg2Hc4rmYmTNKJGebqkRxZenjnW2XzUnngbfCPMw6yKyMubRAZBns5c25m7UFN3PFkt26wrBpXYR5g7yduFD4e6RXaGHZhxuSVLDSR5Pm5L6cBD6dLQ4X5EnAWknk3BCEzKXACJdXyQU72sH39yLsBvGEyTYnc3pUUHwTZ7vrX6cmHvJ8MPWAnSE3nVM6LA9qJy3pa2ygy77YQJ3es8Ztz5TJFAejWStH8n9cZHMQR592PwC8qZhzTRvVGbhVzuDZrGpAeu2eDtvUbxbmrSvpS7dZPuHkPHqyLg89KnmsBFrmbk9LQ8qYzAnzm2LkNpJ7xfBLf6XkKzh2ysvSG5J4xhJQQWeGUdDtCXsAuHJbFNT6ACCXxhERuQF6pefTkmNPeEJpKHynXBrJjgcXrEtjZ6g2fvpDnUuXktvHvnGrwv3KPfuKZBSCc4Mq6EtsjtvvF88aL3autXLStSvpZbhk9999999999YkvuAm3BX2TDHuzmrRg7FDc8dVaWeKgM9G8SRCBFVz8rKSWGfUQbk5xKnZath6sMmBmL4hxeHB7j5sb3DmS6kZ3Qkh5sM6hqRWFW3WMU" #Max 1024 characters
-$AzureAD_Tenant_ID = "9c4bfeb4-0dda-414d-bfc4-1b696ff36fd1" #Provide the previously collected Azure AD tenant/directory ID
+$SVP_App_ID = "1bc19cbb-xx6e-4adf-xxxx-ba865c736c7c" #Provide the previously created service principal Application ID   
+$SVP_Password = "" #Password of the service principal
+$AzureAD_Tenant_ID = "9cxxfeb4-0dda-231f-afer-1b696ff36fd1" #Provide the previously collected Azure AD tenant/directory ID
 
 $WVD_Hostpool_RG = "WVD-Backend" #Resource group where the WVD backend resources are located
 $WVD_Hostpool = "WVD-Pool2" #WVD Host pool name
