@@ -11,7 +11,7 @@ $AzureAD_Tenant_ID = "9cxxfeb4-0dda-231f-afer-1b696ff36fd1" #Provide the previou
 
 $WVD_Hostpool_RG = "WVD-Backend" #Resource group where the WVD backend resources are located
 $WVD_Hostpool = "WVD-Pool2" #WVD Host pool name
-$Az_Sub_Id = "cdd8abba-01ca-4be9-8984-1583c8104418" #Azure subscription ID
+$Az_Sub_Id = "cdd8abba-xxxx-xxxx-8984-1583c8104418" #Azure subscription ID
 
 #Optional: specify these variables for Scale Set Auto scaling
 $Storage_Acc_Name = "scriptloading" #Storage Account Name where the operational maintenance & user notification script is stored
