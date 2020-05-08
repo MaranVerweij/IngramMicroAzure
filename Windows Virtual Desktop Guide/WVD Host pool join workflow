@@ -92,7 +92,7 @@ Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow
 
 #Uninstall WVD Agent and bootloader via Win32_Product class (Control Panel Software) in case MSI uninstallers missed a legacy version
 Try { 
-    $MyApp = Get-WmiObject -Class Win32_Product | Where-Object{$_.Name -match "Agent Boot Loader" -or $_.Name -match "Infrastructure Agent" }
+    $MyApp = Get-WmiObject -Class Win32_Product | Where-Object{$_.Name -match "Agent Boot Loader" -or $_.Name -match "Remote Desktop Services" }
     $MyApp.Uninstall()
 }
 Catch {
