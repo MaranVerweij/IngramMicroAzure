@@ -1,0 +1,124 @@
+#This script will join the VM (Instance) to the WVD host pool, while performing preparation & clean up tasks.
+#Author: Maran Verweij - Ingram Micro
+#Version: 1.0
+
+#Run as Administrator
+#Fill in the variables below
+
+$SVP_App_ID = "1bc19cbb-456e-4adf-853d-ba865c736c7c" #Provide the previously created service principal Application ID   
+$SVP_Password = "#7DJgf2nHPewbNvA2fUURcsaWNfgqy9dPgtZYAK9bHUqdaBEWaPTpbWux3ThCfRJAdyCcqdtQ9AcnT4zjMnXnc6K37Gds2nuyRux56svxLS4USeErGjSsRQBAmgVymNK2gx3EZqTPYHmmK6VH3uwadCGrENjMaeyaLW8FUP4ZXZfFxgCfbxr3kfTsBsvsGdPPTTmPCbZugZsNcGwugKQ9VS4D6YjJcRzMEZ2Z4fJtsz47Bf6fC6UxRbxPYRU86GCyN92LN5wdg2Hc4rmYmTNKJGebqkRxZenjnW2XzUnngbfCPMw6yKyMubRAZBns5c25m7UFN3PFkt26wrBpXYR5g7yduFD4e6RXaGHZhxuSVLDSR5Pm5L6cBD6dLQ4X5EnAWknk3BCEzKXACJdXyQU72sH39yLsBvGEyTYnc3pUUHwTZ7vrX6cmHvJ8MPWAnSE3nVM6LA9qJy3pa2ygy77YQJ3es8Ztz5TJFAejWStH8n9cZHMQR592PwC8qZhzTRvVGbhVzuDZrGpAeu2eDtvUbxbmrSvpS7dZPuHkPHqyLg89KnmsBFrmbk9LQ8qYzAnzm2LkNpJ7xfBLf6XkKzh2ysvSG5J4xhJQQWeGUdDtCXsAuHJbFNT6ACCXxhERuQF6pefTkmNPeEJpKHynXBrJjgcXrEtjZ6g2fvpDnUuXktvHvnGrwv3KPfuKZBSCc4Mq6EtsjtvvF88aL3autXLStSvpZbhk9999999999YkvuAm3BX2TDHuzmrRg7FDc8dVaWeKgM9G8SRCBFVz8rKSWGfUQbk5xKnZath6sMmBmL4hxeHB7j5sb3DmS6kZ3Qkh5sM6hqRWFW3WMU" #Max 1024 characters
+$AzureAD_Tenant_ID = "9c4bfeb4-0dda-414d-bfc4-1b696ff36fd1" #Provide the previously collected Azure AD tenant/directory ID
+
+$WVD_Hostpool_RG = "WVD-Backend" #Resource group where the WVD backend resources are located
+$WVD_Hostpool = "WVD-Pool2" #WVD Host pool name
+$Az_Sub_Id = "cdd8abba-01ca-4be9-8984-1583c8104418" #Azure subscription ID
+
+#Optional: specify these variables for Scale Set Auto scaling
+$Storage_Acc_Name = "scriptloading" #Storage Account Name where the operational maintenance & user notification script is stored
+$Container_Name = "windowsvirtualdesktop" #Name of the container where the script is stored
+$Blob_Name = "wvd_opmanagement.ps1" #Name of the script
+$Local_admin_Name = "maran" #Name of the local admin as previously specified ARM template
+$Script_destination = "C:\Users\$Local_admin_Name\" #Location where the script will be stored, changing this is not required
+
+#No more manual input required as of this line, the script can be run now.
+if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+    }
+
+Register-PSRepository -Default -InstallationPolicy Trusted -ErrorAction SilentlyContinue
+
+if (!(Get-InstalledModule Microsoft.RDInfra.RDPowerShell -ErrorAction silentlycontinue)) {
+    Install-Module -Name Az.Desktopvirtualization -Confirm:$False -Force
+    }
+Import-Module -Name Az.Desktopvirtualization
+
+if (!(Get-InstalledModule Microsoft.RDInfra.RDPowerShell -ErrorAction silentlycontinue)) {
+    Install-Module -Name Az.Storage -Confirm:$False -Force
+    }
+Import-Module -Name Az.Storage
+
+$Credentials = New-Object System.Management.Automation.PSCredential($SVP_App_ID, (ConvertTo-SecureString $SVP_Password -AsPlainText -Force))
+Connect-AzAccount -Credential $Credentials -Tenant $AzureAD_Tenant_ID -ServicePrincipal
+
+$Token = Get-AzWvdRegistrationInfo -SubscriptionId $Az_Sub_ID -ResourceGroupName $WVD_Hostpool_RG -HostPoolName $WVD_Hostpool  -ErrorAction SilentlyContinue
+
+if (!($Token.Token)) { #Verify if the registration information/token already exists
+    $Token_Expiration = (Get-Date).AddHours(4)
+    $Token = New-AzWvdRegistrationInfo -SubscriptionId $Az_Sub_ID -ResourceGroupName $WVD_Hostpool_RG -HostPoolName $WVD_Hostpool -ExpirationTime $Token_Expiration
+    }   
+else {
+    #$Token already contains the registration info (including join token)
+    }
+
+$Token_string = $Token.Token
+
+#Download the WVD agent
+$url = "https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrmXv"
+$output_agent = "C:\Program Files\wvdagent.msi"
+(New-Object System.Net.WebClient).DownloadFile($url, $output_agent)
+
+#Download the bootloader
+$url = "https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrxrH"
+$output_bootloader = "C:\Program Files\bootloader.msi"
+(New-Object System.Net.WebClient).DownloadFile($url, $output_bootloader)
+
+#Unregister the session host FQDN, if the FQDN is already registered
+$sh_list = Get-AzWvdSessionHost -SubscriptionId $Az_Sub_Id -ResourceGroupName $WVD_Hostpool_RG -HostPoolName $WVD_Hostpool
+$FQDN = ([System.Net.Dns]::GetHostByName(($env:computerName))).Hostname
+
+foreach ($sh in $sh_list) {
+    if ($sh.Name -match $FQDN) { #Check if the host FQDN is part of any registered session host name
+        Remove-AzWvdSessionHost -SubscriptionId $Az_Sub_Id -ResourceGroupName $WVD_Hostpool_RG -HostPoolName $WVD_Hostpool -Name $FQDN -Force
+    }
+} 
+
+#Uninstall the WVD agent in case it is already installed to prevent issues joining the designated host pool
+$MSIArguments = @(
+    "/x" 
+    """$output_agent"""
+    "/qn"
+    "/norestart"
+)
+Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+
+#Uninstall the bootloader in case it is already installed to prevent issues joining the designated host pool
+$MSIArguments = @(
+    "/x" 
+    """$output_bootloader"""
+    "/qn"
+    "/norestart"
+)
+Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+
+#Uninstall WVD Agent and bootloader via Win32_Product class (Control Panel Software) in case MSI uninstallers missed a legacy version
+Try { 
+    $MyApp = Get-WmiObject -Class Win32_Product | Where-Object{$_.Name -match "Agent Boot Loader" -or $_.Name -match "Infrastructure Agent" }
+    $MyApp.Uninstall()
+}
+Catch {
+    #Not installed, continue
+}
+
+#Install the WVD agent
+$MSIArguments = @(
+    "/i" 
+    """$output_agent"""
+    "/qn"
+    "/norestart"
+    "REGISTRATIONTOKEN=$Token_string" 
+    "/log"
+    "D:\log.txt"
+)
+Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+
+#Install the bootloader
+$MSIArguments = @(
+    "/i" 
+    """$output_bootloader"""
+    "/qn"
+    "/norestart"
+)
+Start-Process "msiexec.exe" -ArgumentList $MSIArguments -Wait -NoNewWindow 
+
+#Remove both installers
+Remove-Item $output_bootloader, $output_agent -Recurse -Force
