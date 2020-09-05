@@ -54,6 +54,14 @@ $Key = Get-AzStorageAccountKey -ResourceGroupName $ResourceGroup_Name -Name $Sto
 [System.Security.SecureString]$SVC_Password = ConvertTo-SecureString -String $Key.Value -AsPlainText -Force #Create creds from previous input
 
 Try {
+    Remove-ADUser -Identity $SVC_Name -Confirm:$False -ErrorAction Stop
+    Write-Host "Account with name: $SVC_Name already existed prior to running this script. The script will now attempt to remove and re-create it."
+    }
+Catch {
+    Write-Host "Account with name: $SVC_Name does not exist. The script will attempt to create this account and configure it." 
+}
+
+Try {
     New-ADUser -ErrorAction Stop `
         -Name $SVC_Name `
         -DisplayName $SVC_Name `
