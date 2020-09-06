@@ -17,6 +17,11 @@ Catch {
 #Disable Windows Update for future boot ups
 Set-Service wuauserv -StartupType Disabled
 
+$Reg_path = "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"
+If (-Not (Test-Path $reg_path)) { New-Item $Reg_path -Force }
+Set-ItemProperty $Reg_path -Name NoAutoUpdate -Value 1
+Set-ItemProperty $Reg_path -Name AUOptions -Value 3
+
 #Start Windows Module Installer (as Sysprep requires it)
 Set-Service TrustedInstaller -Status Running -StartupType Automatic
 
