@@ -26,7 +26,3 @@ Set-ItemProperty $Reg_path -Name AUOptions -Value 3
 Set-Service TrustedInstaller -Status Running -StartupType Automatic
 
 Start-Job -ScriptBlock { Start-Process -FilePath C:\Windows\System32\Sysprep\Sysprep.exe -ArgumentList ‘/generalize /oobe /shutdown’ }
-
-#Optional: Use at own risk. Implement the code below in a scheduled task to stop & disable Windows Modules Installer on startup. As of September 2020 Windows 10 enables
-#The Windows Module Installer even if it was disabled prior to running Sysprep. 
-#Set-Service TrustedInstaller -Status Stopped -StartupType Disabled
