@@ -25,4 +25,4 @@ Set-ItemProperty $Reg_path -Name AUOptions -Value 3
 #Start Windows Module Installer (as Sysprep requires it)
 Set-Service TrustedInstaller -Status Running -StartupType Automatic
 
-Start-Job -ScriptBlock { Start-Process -FilePath C:\Windows\System32\Sysprep\Sysprep.exe -ArgumentList ‘/generalize /oobe /shutdown’ }
+Start-Job -ScriptBlock { Start-Process -FilePath C:\Windows\System32\Sysprep\Sysprep.exe -ArgumentList '/generalize /oobe /shutdown' }
