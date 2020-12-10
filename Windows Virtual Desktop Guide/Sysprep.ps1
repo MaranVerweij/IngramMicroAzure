@@ -3,7 +3,7 @@
 #Version: 1.0
 #No warranty implied
 
-#Run as Administrator
+#Run as Administrator in PowerShell x64 (not x86)
 
 #Uninstall WVD Agent software via Win32_Product class (Control Panel Software) in case MSI uninstallers missed a legacy version
 Try { 
@@ -14,7 +14,7 @@ Catch {
     #Not installed, continue
 }
 
-#Disable Windows Update for future boot ups
+#Disable Windows Update for future start ups
 Set-Service wuauserv -StartupType Disabled
 
 $Reg_path = "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"
