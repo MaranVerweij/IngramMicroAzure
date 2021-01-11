@@ -44,7 +44,7 @@ if ($Disable_Windows_Modules_Installer -eq "Yes") {
     }
 
 if ($Disable_Windows_Search -eq "Yes") {
-    #Disable and stop Windows Module Installer to prevent issues (via a Scheduled Task at startup)
+    #Disable and stop Windows Search to prevent issues (via a Scheduled Task at startup)
     $Scriptname = "Disable_Windows_Search.ps1"
     $Scriptcode = "Set-Service WSearch -Status Stopped -StartupType Disabled"
 
