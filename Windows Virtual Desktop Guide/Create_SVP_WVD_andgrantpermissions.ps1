@@ -64,9 +64,6 @@ elseif ($Check_Ver[0].Version.Major -le 3 -and $Check_Ver[0].Version.Minor -le 3
 
 Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force #Restore initial Execution policy
 
-[System.Security.SecureString]$SecPwd = ConvertTo-SecureString -String $Password -AsPlainText -Force #Create creds from previous input
-$Credentials = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $UserName, $SecPwd
-
 Try {
 Connect-AzAccount -Credential $Credentials -Subscription $Azure_sub -ErrorAction Stop #Authenticate to Azure (Az Powershell module)
 }
