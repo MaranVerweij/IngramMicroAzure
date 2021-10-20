@@ -5,9 +5,8 @@
 
 #Run as Administrator
 #Fill in the variables below
+#Script will prompt for Admin (Global Admin) credentials
 
-$UserName = "" #Azure account name in UPN format
-$Password = "" #Password for Azure account
 $Azure_sub = "" #Azure subscription ID
 
 $SVP_Displayname = "SVP_WVD_1" #Display name of the new service principal
