@@ -50,7 +50,7 @@ if ($Check_ver -eq $null) {
     Install-Module Az.Resources
     Import-Module Az.Resources
 }
-elseif ($Check_Ver[0].Version.Major -eq 4 -and $Check_Ver[0].Version.Minor -ge 4) {
+elseif ($Check_Ver[0].Version.Major -ge 4 -and $Check_Ver[0].Version.Minor -ge 4) {
     #Nothing
 } 
 else {
