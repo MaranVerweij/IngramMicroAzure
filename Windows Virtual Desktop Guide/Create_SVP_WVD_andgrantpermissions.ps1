@@ -53,7 +53,7 @@ if ($Check_ver -eq $null) {
 elseif ($Check_Ver[0].Version.Major -eq 4 -and $Check_Ver[0].Version.Minor -eq 4) {
     #Nothing
 } 
-elseif ($Check_Ver[0].Version.Major -le 3 -and $Check_Ver[0].Version.Minor -le 3) {
+elseif ($Check_Ver[0].Version.Major -le 3 -and $Check_Ver[0].Version.Minor -le 10) {
     Remove-Module -Name Az.Accounts -Force -ErrorAction SilentlyContinue
     Uninstall-Module -Name Az.Accounts -Force 
     Install-Module Az.Accounts
