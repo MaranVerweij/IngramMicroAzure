@@ -32,7 +32,7 @@ if ($Check_ver -eq $null) {
     Install-Module Az.Accounts
     Import-Module Az.Accounts
 }
-elseif ($Check_Ver[0].Version.Major -ge 3) {
+elseif ($Check_Ver[0].Version.Major -ge 2) {
     #Nothing
 }
 else {
@@ -41,6 +41,7 @@ else {
     Install-Module Az.Accounts
     Import-Module Az.Accounts
     powershell -WindowStyle hidden -Command "& {[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('Close and restart PowerShell','WARNING')}"
+    Exit
 }
 
 $Check_Ver = $null 
@@ -58,6 +59,7 @@ elseif ($Check_Ver[0].Version.Major -le 3 -and $Check_Ver[0].Version.Minor -le 3
     Install-Module Az.Accounts
     Import-Module Az.Accounts
     powershell -WindowStyle hidden -Command "& {[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('Close and restart PowerShell','WARNING')}"
+    Exit
 }
 
 Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force #Restore initial Execution policy
