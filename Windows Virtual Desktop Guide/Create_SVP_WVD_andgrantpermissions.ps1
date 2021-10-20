@@ -1,6 +1,6 @@
 #This script creates an Azure Service Principal (Azure AD Application service principal) and assigns it permissions on the WVD tenant/workspace and specified Azure subscription.
 #Author: Maran Verweij - Ingram Micro
-#Version: 1.2
+#Version: 1.3
 #No warranty implied
 
 #Run as Administrator
