@@ -19,14 +19,20 @@ $Role_Scope = "/subscriptions/$Azure_sub" #Scope of service principal RBAC role 
 $Execution_Policy = Get-ExecutionPolicy #Get current Execution policy
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force #Run this line seperately if ambigious module errors are thrown while running the script, then run the entire script again
 
+Register-PSRepository -Default -InstallationPolicy Trusted -ErrorAction silentlycontinue
+Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted -ErrorAction silentlycontinue
+
 if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Confirm:$False -Force
     }
 
-if (!(Get-InstalledModule Az -ErrorAction silentlycontinue)) {
-    Install-Module -Name Az -Confirm:$False -Force
-    }
-Import-Module -Name Az
+Remove-Module -Name Az.Resources -Force
+Uninstall-Module -Name Az.Resources -Force
+Install-Module Az.Resources
+
+Remove-Module -Name Az.Accounts -Force
+Uninstall-Module -Name Az.Accounts -Force
+Install-Module Az.Accounts
 
 Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force #Restore initial Execution policy
 
