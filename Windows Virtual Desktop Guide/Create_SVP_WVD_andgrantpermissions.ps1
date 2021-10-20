@@ -26,13 +26,39 @@ if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Confirm:$False -Force
     }
 
-Remove-Module -Name Az.Resources -Force
-Uninstall-Module -Name Az.Resources -Force
-Install-Module Az.Resources
+$Check_Ver = $null 
+$Check_Ver = Get-Module -Name Az.Accounts
+if ($Check_ver -eq $null) {
+    Install-Module Az.Accounts
+    Import-Module Az.Accounts
+}
+elseif ($Check_Ver[0].Version.Major -ge 3) {
+    #Nothing
+}
+else {
+    Remove-Module -Name Az.Accounts -Force -ErrorAction SilentlyContinue
+    Uninstall-Module -Name Az.Accounts -Force 
+    Install-Module Az.Accounts
+    Import-Module Az.Accounts
+    powershell -WindowStyle hidden -Command "& {[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('Close and restart PowerShell','WARNING')}"
+}
 
-Remove-Module -Name Az.Accounts -Force
-Uninstall-Module -Name Az.Accounts -Force
-Install-Module Az.Accounts
+$Check_Ver = $null 
+$Check_Ver = Get-Module -Name Az.Resources
+if ($Check_ver -eq $null) {
+    Install-Module Az.Resources
+    Import-Module Az.Resources
+}
+elseif ($Check_Ver[0].Version.Major -eq 4 -and $Check_Ver[0].Version.Minor -eq 4) {
+    #Nothing
+} 
+elseif ($Check_Ver[0].Version.Major -le 3 -and $Check_Ver[0].Version.Minor -le 3) {
+    Remove-Module -Name Az.Accounts -Force -ErrorAction SilentlyContinue
+    Uninstall-Module -Name Az.Accounts -Force 
+    Install-Module Az.Accounts
+    Import-Module Az.Accounts
+    powershell -WindowStyle hidden -Command "& {[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('Close and restart PowerShell','WARNING')}"
+}
 
 Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force #Restore initial Execution policy
 
