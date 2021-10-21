@@ -54,7 +54,7 @@ elseif ($Check_Ver[0].Version.Major -ge 4 -and $Check_Ver[0].Version.Minor -ge 4
     #Nothing
 } 
 else {
-    Remove-Module -Name Az.Accounts -Force -ErrorAction SilentlyContinue
+    Remove-Module -Name Az.Resources -Force -ErrorAction SilentlyContinue
     Uninstall-Module -Name Az.Resources -Force 
     Install-Module Az.Resources
     Import-Module Az.Resources
