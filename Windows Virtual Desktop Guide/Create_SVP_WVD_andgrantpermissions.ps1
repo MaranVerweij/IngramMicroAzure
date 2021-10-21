@@ -64,12 +64,7 @@ else {
 
 Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force #Restore initial Execution policy
 
-Try {
-Connect-AzAccount -Credential $Credentials -Subscription $Azure_sub -ErrorAction Stop #Authenticate to Azure (Az Powershell module)
-}
-Catch {
 Connect-AzAccount -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module) with interactive modern authentication screen
-} 
 
 $credentials = New-Object Microsoft.Azure.Commands.ActiveDirectory.PSADPasswordCredential -Property @{ StartDate=Get-Date; EndDate=Get-Date -Year 3000; Password=$SVP_Password}
 $SVP = New-AzAdServicePrincipal -DisplayName $SVP_Displayname -PasswordCredential $credentials 
