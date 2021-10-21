@@ -55,9 +55,9 @@ elseif ($Check_Ver[0].Version.Major -ge 4 -and $Check_Ver[0].Version.Minor -ge 4
 } 
 else {
     Remove-Module -Name Az.Accounts -Force -ErrorAction SilentlyContinue
-    Uninstall-Module -Name Az.Accounts -Force 
-    Install-Module Az.Accounts
-    Import-Module Az.Accounts
+    Uninstall-Module -Name Az.Resources -Force 
+    Install-Module Az.Resources
+    Import-Module Az.Resources
     powershell -WindowStyle hidden -Command "& {[System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('Close and restart PowerShell','WARNING')}"
     Exit
 }
