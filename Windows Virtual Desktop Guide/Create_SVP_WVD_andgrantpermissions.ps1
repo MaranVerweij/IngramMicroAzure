@@ -25,6 +25,11 @@ Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted -ErrorAction sile
 if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Confirm:$False -Force
     }
+    
+    Install-Module Az.Accounts
+    Import-Module Az.Accounts
+    Install-Module Az.Resources
+    Import-Module Az.Resources
 
 $Check_Ver = $null 
 $Check_Ver = Get-Module -Name Az.Accounts
