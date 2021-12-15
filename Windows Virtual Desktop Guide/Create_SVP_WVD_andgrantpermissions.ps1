@@ -146,19 +146,19 @@ Remove-Item VMandVMSSOperator.json
 
 #Assign role: 'WVD - Operational Maintenance' to the Service Principal
 Try {
-    New-AzRoleAssignment -RoleDefinitionName "WVD - Operational Maintenance" -ApplicationId $SVP.AppId -Scope $Role_Scope -ErrorAction Stop
+    New-AzRoleAssignment -RoleDefinitionName "WVD - Operational Maintenance" -ObjectID $SVP.Id -Scope $Role_Scope -ErrorAction Stop
     }
     Catch {
-    New-AzRoleAssignment -RoleDefinitionName "Contributor" -ApplicationId $SVP.AppId
+    New-AzRoleAssignment -RoleDefinitionName "Contributor" -ObjectID $SVP.Id
     Write-Host "WARNING: Assigned Contributor role to the Service Principal because 'WVD - Operational Maintenance' could not be assigned. If you also received an error from 'New-AzRoleAssignment' the Contributor role could not be assigned either, most likely because the Service Principal could not be created."
     }
 
 #Assign role: 'VM and VMSS Operator' to the Service Principal
 Try {
-    New-AzRoleAssignment -RoleDefinitionName "VM and VMSS Operator" -ApplicationId $SVP.AppId -Scope $Role_Scope -ErrorAction Stop
+    New-AzRoleAssignment -RoleDefinitionName "VM and VMSS Operator" -ObjectID $SVP.Id -Scope $Role_Scope -ErrorAction Stop
     }
     Catch {
-    New-AzRoleAssignment -RoleDefinitionName "Contributor" -ApplicationId $SVP.AppId
+    New-AzRoleAssignment -RoleDefinitionName "Contributor" -ObjectID $SVP.Id
     Write-Host "WARNING: Assigned Contributor role to the Service Principal because 'VM and VMSS Operator' could not be assigned. If you also received an error from 'New-AzRoleAssignment' the Contributor role could not be assigned either, most likely because the Service Principal could not be created."
     }
     
