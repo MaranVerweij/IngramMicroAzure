@@ -1,6 +1,6 @@
 #This script creates an Azure Service Principal (Azure AD Application service principal) and assigns it permissions on the WVD tenant/workspace and specified Azure subscription.
 #Author: Maran Verweij - Ingram Micro
-#Version: 1.3
+#Version: 1.5
 #No warranty implied
 
 #Run as Administrator
@@ -9,8 +9,7 @@
 
 $Azure_sub = "" #Azure subscription ID
 
-$SVP_Displayname = "SVP_WVD_1" #Display name of the new service principal
-$SVP_Password = "" #Max 850 characters
+$SVP_Displayname = "SVP_AVD_1" #Display name of the new service principal
 
 #No more manual input required as of this line, the script can be run now.
 
@@ -66,8 +65,8 @@ Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force
 
 Connect-AzAccount -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module) with interactive modern authentication screen
 
-$credentials = New-Object Microsoft.Azure.Commands.ActiveDirectory.PSADPasswordCredential -Property @{ StartDate=Get-Date; EndDate=Get-Date -Year 3000; Password=$SVP_Password}
-$SVP = New-AzAdServicePrincipal -DisplayName $SVP_Displayname -PasswordCredential $credentials 
+$SVP = New-AzAdServicePrincipal -DisplayName $SVP_Displayname
+$SVP_Password = New-AzADAppCredential -StartDate $Startdate -EndDate $Enddate -ApplicationId $SVP.AppId
 
 Start-Sleep 10
 
@@ -161,4 +160,5 @@ Try {
     Write-Host "WARNING: Assigned Contributor role to the Service Principal because 'VM and VMSS Operator' could not be assigned. If you also received an error from 'New-AzRoleAssignment' the Contributor role could not be assigned either, most likely because the Service Principal could not be created."
     }
     
-Write-Host "Document the following string, this is the Service Principal (Application) ID:" $SVP.ApplicationId  
+Write-Host "Document the following string, this is the Service Principal (Application) ID:" $SVP.AppId
+Write-Host "Document the following string, this is the Service Principal (Application) Secret/Password:" $SVP_Password.SecretText
