@@ -16,20 +16,15 @@ $SVP_Password = "" #Max 850 characters
 
 $Role_Scope = "/subscriptions/$Azure_sub" #Scope of service principal RBAC role assignment, leave default if unsure 
 
+if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Confirm:$False -Force
+    }
+
 $Execution_Policy = Get-ExecutionPolicy #Get current Execution policy
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force #Run this line seperately if ambigious module errors are thrown while running the script, then run the entire script again
 
 Register-PSRepository -Default -InstallationPolicy Trusted -ErrorAction silentlycontinue
 Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted -ErrorAction silentlycontinue
-
-if (!(Get-PackageProvider -Name NuGet -ErrorAction silentlycontinue -Force)) {
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.208 -Confirm:$False -Force
-    }
-    
-    Install-Module Az.Accounts
-    Import-Module Az.Accounts
-    Install-Module Az.Resources
-    Import-Module Az.Resources
 
 $Check_Ver = $null 
 $Check_Ver = Get-Module -Name Az.Accounts
@@ -55,7 +50,7 @@ if ($Check_ver -eq $null) {
     Install-Module Az.Resources
     Import-Module Az.Resources
 }
-elseif ($Check_Ver[0].Version.Major -ge 4 -and $Check_Ver[0].Version.Minor -ge 4) {
+elseif ($Check_Ver[0].Version.Major -ge 5) {
     #Nothing
 } 
 else {
