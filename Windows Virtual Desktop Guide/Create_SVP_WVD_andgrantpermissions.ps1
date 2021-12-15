@@ -66,6 +66,7 @@ Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force
 Connect-AzAccount -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module) with interactive modern authentication screen
 
 $SVP = New-AzAdServicePrincipal -DisplayName $SVP_Displayname
+Start-Sleep 10
 $Startdate = Get-Date
 $Enddate = Get-Date -Year 3000
 $SVP_Password = New-AzADAppCredential -StartDate $Startdate -EndDate $Enddate -ApplicationId $SVP.AppId
