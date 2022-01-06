@@ -1,6 +1,6 @@
 #This script creates an Azure Service Principal (Azure AD Application service principal) and assigns it permissions on the WVD tenant/workspace and specified Azure subscription.
 #Author: Maran Verweij - Ingram Micro
-#Version: 1.5
+#Version: 2.0
 #No warranty implied
 
 #Run as Administrator
@@ -62,6 +62,14 @@ else {
 }
 
 Set-ExecutionPolicy -ExecutionPolicy $Execution_Policy -Scope CurrentUser -Force #Restore initial Execution policy
+
+Write-Output "
+[!!!_________________________________________________________________________________________________________!!!]
+____________________________________________________________________________________________________________
+An Azure AD authentication prompt will appear after pressing Enter. Sign in with the correct Azure AD Account.
+[!!!_________________________________________________________________________________________________________!!!]
+____________________________________________________________________________________________________________"
+Pause
 
 Connect-AzAccount -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module) with interactive modern authentication screen
 
