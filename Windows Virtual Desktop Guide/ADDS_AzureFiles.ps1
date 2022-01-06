@@ -1,6 +1,6 @@
 #This script will make an Azure Storage Account ready to host Azure File shares based on a traditional AD DS environment. The script will create a service account in AD DS. 
 #Author: Maran Verweij - Ingram Micro
-#Version: 1.0
+#Version: 2.0
 #No warranty implied
 
 #Run as Administrator
@@ -33,10 +33,19 @@ if (!(Get-InstalledModule Az.Storage -ErrorAction silentlycontinue)) {
     }
 Import-Module -Name Az.Storage
 
+Write-Output "
+[!!!_________________________________________________________________________________________________________!!!]
+____________________________________________________________________________________________________________
+
+An Azure AD authentication prompt will appear after pressing Enter. Sign in with the correct Azure AD Account.
+[!!!_________________________________________________________________________________________________________!!!]
+____________________________________________________________________________________________________________"
+Pause
+
 Connect-AzAccount 
 
 Try {
-    Select-AzSubscription -SubscriptionId $Azure_Sub_ID -ErrorAction Stop
+    Set-AzContext -Subscription $Azure_Sub_ID -ErrorAction Stop
 }
 Catch {
     Write-Host "Could not select Azure subscription. Verify that the Azure AD account has the Owner role assigned on Azure subscription ID: $Azure_Sub_ID "
