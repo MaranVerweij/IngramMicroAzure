@@ -1,5 +1,5 @@
 #This script deploys the Azure QuickStart Landing Zone
-#Requires Global admin with User access switch set to 'Yes'
+#Script must be run with an (Azure AD) Global admin with User access switch set to 'Yes'
 #Author: Maran Verweij - Ingram Micro
 #Version: 1.0
 #No warranty implied
