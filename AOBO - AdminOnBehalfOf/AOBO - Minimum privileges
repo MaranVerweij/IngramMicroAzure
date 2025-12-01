@@ -22,7 +22,7 @@ if ($ErrorCheck -match 'Conflict' -or $ErrorCheck -eq $null) {
   Pause 
   Exit 
 } 
-If ($ErrorCheck -notmatch 'Conflict' -and $ErrorCheck -ne $null) { 
+if ($ErrorCheck -notmatch 'Conflict' -and $ErrorCheck -ne $null) { 
   Write-Output "`n `n `n `n `n `n `n" 
   Write-Output $ErrorCheck 
   Write-Output "Errors were found, please contact your known contact at Ingram Micro or your IT 
