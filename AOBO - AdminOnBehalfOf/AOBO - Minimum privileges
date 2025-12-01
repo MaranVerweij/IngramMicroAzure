@@ -1,30 +1,32 @@
 #AOBO - Minimum privileges
 #Create temporary placeholder management group to activate Management Group functionality 
-New-AzManagementGroup -GroupId 'Placeholder_To_Be_Removed' 
+New-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" 
 Start-Sleep 2 
-Remove-AzManagementGroup -GroupId 'Placeholder_To_Be_Removed' 
+Remove-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" 
 Start-Sleep 2
 
 $MGList = Get-AzManagementGroup        
 $ErrorCheck = $null
 
 foreach ($MG in $MGList) { 
-  $HideOutput = New-AZRoleAssignment -ObjectId '34c4dd11-78c0-41e5-8370-c6dbf16bc3e9' -ObjectType 'ForeignGroup' -RoleDefinitionName 'Support Request Contributor' -Scope $MG.Id -ErrorVariable ErrorCheck -ErrorAction silentlycontinue 
-  $HideOutput = New-AZRoleAssignment -ObjectId '34c4dd11-78c0-41e5-8370-c6dbf16bc3e9' -ObjectType 'ForeignGroup' -RoleDefinitionName 'Reader' -Scope $MG.Id -ErrorVariable ErrorCheck -ErrorAction silentlycontinue 
-  $HideOutput = New-AZRoleAssignment -ObjectId '34c4dd11-78c0-41e5-8370-c6dbf16bc3e9' -ObjectType 'ForeignGroup' -RoleDefinitionName 'Quota Request Operator' -Scope $MG.Id -ErrorVariable ErrorCheck -ErrorAction silentlycontinue 
+  $HideOutput = New-AZRoleAssignment -ObjectId "34c4dd11-78c0-41e5-8370-c6dbf16bc3e9" -ObjectType "ForeignGroup" -RoleDefinitionName "Support Request Contributor" -Scope $MG.Id -ErrorVariable ErrorCheck -ErrorAction silentlycontinue 
+  $HideOutput = New-AZRoleAssignment -ObjectId "34c4dd11-78c0-41e5-8370-c6dbf16bc3e9" -ObjectType "ForeignGroup" -RoleDefinitionName "Reader" -Scope $MG.Id -ErrorVariable ErrorCheck -ErrorAction silentlycontinue 
+  $HideOutput = New-AZRoleAssignment -ObjectId "34c4dd11-78c0-41e5-8370-c6dbf16bc3e9" -ObjectType "ForeignGroup" -RoleDefinitionName "Quota Request Operator" -Scope $MG.Id -ErrorVariable ErrorCheck -ErrorAction silentlycontinue 
 }
 
 $ErrorCheck = $null 
-if ($ErrorCheck -match 'Conflict' -or $ErrorCheck -eq $null) { 
+if ($ErrorCheck -match "Conflict" -or $ErrorCheck -eq $null) { 
   Write-Output "`n `n `n `n `n `n `n" 
   Write-Output "Deployment was successful, please contact your known contact at Ingram Micro or your 
   IT Partner to inform them. Cloud Shell may be closed now." 
   Pause 
   Exit 
 } 
-if ($ErrorCheck -notmatch 'Conflict' -and $ErrorCheck -ne $null) { 
+if ($ErrorCheck -notmatch "Conflict" -and $ErrorCheck -ne $null) { 
   Write-Output "`n `n `n `n `n `n `n" 
   Write-Output $ErrorCheck 
   Write-Output "Errors were found, please contact your known contact at Ingram Micro or your IT 
   Partner for further analysis."
 }
+#
+#End
