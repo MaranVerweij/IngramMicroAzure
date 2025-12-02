@@ -1,4 +1,4 @@
-#AOBO - Minimum privileges
+#AOBO - Full Service privileges
 #Create temporary placeholder management group to activate Management Group functionality 
 New-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" 
 Start-Sleep 2 
