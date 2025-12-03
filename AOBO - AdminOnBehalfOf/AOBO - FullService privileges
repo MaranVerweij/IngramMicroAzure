@@ -16,9 +16,19 @@ foreach ($Sub in $All_Subs) {
 }
 
 Start-Sleep 5
+$ErrorCheck = $null
 
-New-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" 
-Start-Sleep 2 
+New-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" -ErrorVariable ErrorCheck
+Start-Sleep 2
+
+if ($ErrorCheck -ne $null) { 
+  Write-Output "`n `n `n `n `n `n `n" 
+  Write-Output "Error detected - please verify if the current user is Global Administrator and chapter 1 has been completed. Please run the script again. If errors persist: sign out and sign back into the Azure portal."
+  Pause
+  Exit
+}
+  
+ 
 Remove-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" 
 Start-Sleep 2
 
