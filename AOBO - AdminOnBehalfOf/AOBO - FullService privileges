@@ -27,8 +27,7 @@ if ($ErrorCheck -ne $null) {
   Pause
   Exit
 }
-  
- 
+
 Remove-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" 
 Start-Sleep 2
 
