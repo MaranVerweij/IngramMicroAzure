@@ -1,5 +1,22 @@
 #AOBO - Full Service privileges
-#Create temporary placeholder management group to activate Management Group functionality 
+#Create temporary placeholder management group to activate Management Group functionality
+
+$All_Subs = Get-AzSubscription
+$CurrentUser = Get-AzADUser -signedIn
+$CurrentUserId = $CurrentUser.Id
+
+foreach ($Sub in $All_Subs) {
+    Set-AzContext -Subscription $Sub
+    $Sub_Id = $Sub.Id
+    $RBACCheck = Get-AzRoleAssignment -ObjectId $CurrentUserId -RoleDefinitionName "Owner" -Scope "/subscriptions/$Sub_Id"
+    if ($RBACCheck -eq $null) {
+        New-AzRoleAssignment -ObjectId $CurrentUserId -RoleDefinitionName "Owner" -Scope "/subscriptions/$Sub_Id" -ErrorAction SilentlyContinue
+    }
+    $Sub_Id = $null
+}
+
+Start-Sleep 5
+
 New-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" 
 Start-Sleep 2 
 Remove-AzManagementGroup -GroupId "Placeholder_To_Be_Removed" 
@@ -9,7 +26,7 @@ $MGList = Get-AzManagementGroup
 $ErrorCheck = $null
 
 foreach ($MG in $MGList) { 
-  $HideOutput = New-AZRoleAssignment -ObjectId "34c4dd11-78c0-41e5-8370-c6dbf16bc3e9" -ObjectType "ForeignGroup" -RoleDefinitionName "Owner" -Scope $MG.Id -ErrorVariable ErrorCheck -ErrorAction silentlycontinue 
+  $HideOutput = New-AZRoleAssignment -ObjectId "34c4dd11-78c0-41e5-8370-c6dbf16bc3e9" -ObjectType "ForeignGroup" -RoleDefinitionName "Owner" -Scope $MG.Id -ErrorVariable ErrorCheck -ErrorAction SilentlyContinue
 }
 
 $ErrorCheck = $null 
