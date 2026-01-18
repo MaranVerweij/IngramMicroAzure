@@ -11,6 +11,8 @@ $Azure_sub = "" #Azure subscription ID
 
 $SVP_Displayname = "SVP_AVD_1" #Display name of the new service principal
 
+$Azure_tenant = "" #Azure tenant ID. Only fill in if needed (e.g. when using an external account)
+
 #No more manual input required as of this line, the script can be run now.
 
 $Role_Scope = "/subscriptions/$Azure_sub" #Scope of service principal RBAC role assignment, leave default if unsure 
@@ -71,7 +73,12 @@ An Azure AD authentication prompt will appear after pressing Enter. Sign in with
 ____________________________________________________________________________________________________________"
 Pause
 
-Connect-AzAccount -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module) with interactive modern authentication screen
+if ($Azure_tenant) {
+    Connect-AzAccount -Subscription $Azure_sub -Tenant $Azure_tenant #Authenticate to Azure (Az Powershell module) with interactive modern authentication screen
+}
+else {
+    Connect-AzAccount -Subscription $Azure_sub #Authenticate to Azure (Az Powershell module) with interactive modern authentication screen
+}
 
 $SVP = New-AzAdServicePrincipal -DisplayName $SVP_Displayname
 Start-Sleep 10
